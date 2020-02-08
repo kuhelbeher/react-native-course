@@ -3,7 +3,7 @@
   "plugins": ["prettier"],
   "parser": "babel-eslint",
   "rules": {
-    "import/no-unresolved": "off",
+    "react/prop-types": "off",
     "react/jsx-filename-extension": [
       1,
       {
