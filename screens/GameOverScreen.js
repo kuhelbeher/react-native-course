@@ -1,6 +1,8 @@
 import React from 'react';
-import { View, Text, StyleSheet, Button, Image } from 'react-native';
+import { View, Text, StyleSheet, Image } from 'react-native';
 import defaultStyles from '../constants/default-styles';
+import colors from '../constants/colors';
+import MainButton from '../components/MainButton';
 
 const GameOverScreen = ({ rounds, userNumber, onRestart }) => {
   return (
@@ -15,9 +17,14 @@ const GameOverScreen = ({ rounds, userNumber, onRestart }) => {
         //     'https://www.yourdictionary.com/images/definitions/lg/12337.summit.jpg',
         // }}
       />
-      <Text style={defaultStyles.bodyText}>Number of rounds: {rounds}</Text>
-      <Text style={defaultStyles.bodyText}>Number was: {userNumber}</Text>
-      <Button title="Restart" onPress={onRestart} />
+      <View style={styles.resultContainer}>
+        <Text style={{ ...defaultStyles.bodyText, ...styles.resultText }}>
+          Your phone needed <Text style={styles.highlight}>{rounds}</Text>{' '}
+          rounds to guess the number{' '}
+          <Text style={styles.highlight}>{userNumber}</Text>
+        </Text>
+      </View>
+      <MainButton onPress={onRestart}>Restart</MainButton>
     </View>
   );
 };
@@ -35,6 +42,18 @@ const styles = StyleSheet.create({
     borderWidth: 3,
     borderColor: 'black',
     marginVertical: 20,
+  },
+  resultContainer: {
+    marginVertical: 20,
+    marginHorizontal: 30,
+  },
+  highlight: {
+    color: colors.primary,
+    fontFamily: 'open-sans-bold',
+  },
+  resultText: {
+    textAlign: 'center',
+    fontSize: 20,
   },
 });
 

@@ -1,11 +1,13 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { View, Text, StyleSheet, Button, Alert } from 'react-native';
+import { View, Text, StyleSheet, Alert } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 
 import NumberContainer from '../components/NumberContainer';
 import Card from '../components/Card';
 
 import { generateRandomBetween } from '../utils/common';
 import defaultStyles from '../constants/default-styles';
+import MainButton from '../components/MainButton';
 
 const GameScreen = ({ userChoice, onGameOver }) => {
   const [currentGuess, setCurrentGuess] = useState(
@@ -55,8 +57,12 @@ const GameScreen = ({ userChoice, onGameOver }) => {
       <Text style={defaultStyles.bodyText}>Opponent&apos;s Guess</Text>
       <NumberContainer>{currentGuess}</NumberContainer>
       <Card style={styles.buttonContainer}>
-        <Button title="Lower" onPress={() => handleNextGuess('lower')} />
-        <Button title="Greater" onPress={() => handleNextGuess('greater')} />
+        <MainButton onPress={() => handleNextGuess('lower')}>
+          <Ionicons name="md-remove" size={24} color="white" />
+        </MainButton>
+        <MainButton onPress={() => handleNextGuess('greater')}>
+          <Ionicons name="md-add" size={24} color="white" />
+        </MainButton>
       </Card>
     </View>
   );
@@ -73,7 +79,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
     marginTop: 20,
     width: 300,
-    maxWidth: '80%',
+    maxWidth: '90%',
   },
 });
 
