@@ -5,6 +5,7 @@ import NumberContainer from '../components/NumberContainer';
 import Card from '../components/Card';
 
 import { generateRandomBetween } from '../utils/common';
+import defaultStyles from '../constants/default-styles';
 
 const GameScreen = ({ userChoice, onGameOver }) => {
   const [currentGuess, setCurrentGuess] = useState(
@@ -51,7 +52,7 @@ const GameScreen = ({ userChoice, onGameOver }) => {
 
   return (
     <View style={styles.screen}>
-      <Text>Opponent&apos;s Guess</Text>
+      <Text style={defaultStyles.bodyText}>Opponent&apos;s Guess</Text>
       <NumberContainer>{currentGuess}</NumberContainer>
       <Card style={styles.buttonContainer}>
         <Button title="Lower" onPress={() => handleNextGuess('lower')} />
