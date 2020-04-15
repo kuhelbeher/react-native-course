@@ -54,6 +54,9 @@ module.exports = {
   rules: {
     "global-require": "off",
     "react/prop-types": "off",
+    "@typescript-eslint/no-use-before-define": "off",
+    "@typescript-eslint/explicit-function-return-type": "off",
+    "react/self-closing-comp": "error",
     "prettier/prettier": [
       "error",
       {

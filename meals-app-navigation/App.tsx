@@ -1,21 +1,31 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
+import * as Font from 'expo-font';
+import { AppLoading } from 'expo';
 
-const white = '#fff';
+import { white } from './config';
+import MealsNavigator from './navigation/MealsNavigator';
 
-const styles = StyleSheet.create({
-  container: {
-    alignItems: 'center',
-    backgroundColor: white,
-    flex: 1,
-    justifyContent: 'center',
-  },
-});
+const fetchFonts = (): Promise<void> => {
+  return Font.loadAsync({
+    'open-sans': require('./assets/fonts/OpenSans-Regular.ttf'),
+    'open-sans-bold': require('./assets/fonts/OpenSans-Bold.ttf'),
+  });
+};
 
-export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app!</Text>
-    </View>
-  );
+function App(): React.ReactNode {
+  const [fontLoaded, setFontLoaded] = useState(false);
+
+  if (!fontLoaded) {
+    return (
+      <AppLoading
+        startAsync={fetchFonts}
+        onFinish={() => setFontLoaded(true)}
+      />
+    );
+  }
+
+  return <MealsNavigator />;
 }
+
+export default App;
