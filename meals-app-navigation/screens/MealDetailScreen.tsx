@@ -1,10 +1,19 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, Button } from 'react-native';
+import { NavigationStackScreenProps } from 'react-navigation-stack';
 
-const MealDetailScreen: React.FC = () => {
+const MealDetailScreen: React.FC<NavigationStackScreenProps> = ({
+  navigation,
+}) => {
   return (
     <View style={styles.screen}>
       <Text>The MealDetailScreen</Text>
+      <Button
+        title="Go back to Categories"
+        onPress={() => {
+          navigation.popToTop();
+        }}
+      />
     </View>
   );
 };
