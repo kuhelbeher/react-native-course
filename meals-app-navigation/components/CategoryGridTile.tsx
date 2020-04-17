@@ -1,5 +1,11 @@
 import React from 'react';
-import { StyleSheet, Text, View, TouchableNativeFeedback } from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  View,
+  TouchableNativeFeedback,
+  Platform,
+} from 'react-native';
 
 import { black } from '../config';
 
@@ -29,7 +35,6 @@ const styles = StyleSheet.create({
   container: {
     alignItems: 'flex-end',
     borderRadius: 10,
-    elevation: 3,
     flex: 1,
     justifyContent: 'flex-end',
     padding: 10,
@@ -39,9 +44,15 @@ const styles = StyleSheet.create({
     shadowRadius: 10,
   },
   gridItem: {
+    borderRadius: 10,
+    elevation: 5,
     flex: 1,
     height: 150,
     margin: 15,
+    overflow:
+      Platform.OS === 'android' && Platform.Version >= 21
+        ? 'hidden'
+        : 'visible',
   },
   title: {
     fontFamily: 'open-sans-bold',
