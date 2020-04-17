@@ -1,13 +1,15 @@
 import React from 'react';
 import { StyleSheet, Text, View, Button } from 'react-native';
-import { NavigationStackScreenProps } from 'react-navigation-stack';
+import { NavigationStackScreenComponent } from 'react-navigation-stack';
+import { MEALS } from '../data/dummy-data';
 
-const MealDetailScreen: React.FC<NavigationStackScreenProps> = ({
-  navigation,
-}) => {
+const MealDetailScreen: NavigationStackScreenComponent = ({ navigation }) => {
+  const mealId = navigation.getParam('mealId');
+
+  const { title } = MEALS.find((meal) => meal.id === mealId) || {};
   return (
     <View style={styles.screen}>
-      <Text>The MealDetailScreen</Text>
+      <Text>{title}</Text>
       <Button
         title="Go back to Categories"
         onPress={() => {
@@ -16,6 +18,16 @@ const MealDetailScreen: React.FC<NavigationStackScreenProps> = ({
       />
     </View>
   );
+};
+
+MealDetailScreen.navigationOptions = ({ navigation }) => {
+  const mealId = navigation.getParam('mealId');
+
+  const { title } = MEALS.find((meal) => meal.id === mealId) || {};
+
+  return {
+    headerTitle: title,
+  };
 };
 
 export default MealDetailScreen;
