@@ -57,6 +57,7 @@ module.exports = {
     "@typescript-eslint/no-use-before-define": "off",
     "@typescript-eslint/explicit-function-return-type": "off",
     "react/self-closing-comp": "error",
+    "import/order": "error",
     "prettier/prettier": [
       "error",
       {
