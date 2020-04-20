@@ -1,25 +1,15 @@
 import React from 'react';
 import { FlatList, ListRenderItemInfo } from 'react-native';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
-import {
-  NavigationDrawerProp,
-  NavigationDrawerScreenProps,
-} from 'react-navigation-drawer';
-import { NavigationScreenConfigProps } from 'react-navigation';
-import {
-  NavigationStackScreenProps,
-  NavigationStackOptions,
-  NavigationStackProp,
-} from 'react-navigation-stack';
+
+import { NavigationStackScreenComponent } from 'react-navigation-stack';
 
 import Category from '../models/category';
 import { CATEGORIES } from '../data/dummy-data';
 import CategoryGridTile from '../components/CategoryGridTile';
 import HeaderButtonComponent from '../components/HeaderButton';
 
-const CategoriesScreen = ({
-  navigation,
-}: NavigationStackScreenProps & NavigationDrawerScreenProps) => {
+const CategoriesScreen: NavigationStackScreenComponent = ({ navigation }) => {
   const renderGridItem = (itemData: ListRenderItemInfo<Category>) => {
     return (
       <CategoryGridTile
@@ -42,11 +32,7 @@ const CategoriesScreen = ({
   );
 };
 
-CategoriesScreen.navigationOptions = ({
-  navigation,
-}: NavigationScreenConfigProps<
-  NavigationStackProp & NavigationDrawerProp
->): NavigationStackOptions => {
+CategoriesScreen.navigationOptions = ({ navigation }) => {
   return {
     headerTitle: 'Meal Categories',
     headerLeft() {
@@ -56,6 +42,10 @@ CategoriesScreen.navigationOptions = ({
             title="Menu"
             iconName="ios-menu"
             onPress={() => {
+              // ignoring this error because navigation als has methods
+              // from NavigationDrawerProp
+              // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+              // @ts-ignore
               navigation.toggleDrawer();
             }}
           />

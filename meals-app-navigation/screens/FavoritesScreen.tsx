@@ -1,33 +1,18 @@
 import React from 'react';
-import {
-  NavigationStackScreenProps,
-  NavigationStackOptions,
-  NavigationStackProp,
-} from 'react-navigation-stack';
+import { NavigationStackScreenComponent } from 'react-navigation-stack';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
-import {
-  NavigationDrawerScreenProps,
-  NavigationDrawerProp,
-} from 'react-navigation-drawer';
-import { NavigationScreenConfigProps } from 'react-navigation';
 
 import MealList from '../components/MealList';
 import { MEALS } from '../data/dummy-data';
 import HeaderButtonComponent from '../components/HeaderButton';
 
-const FavoritesScreen = ({
-  navigation,
-}: NavigationStackScreenProps & NavigationDrawerScreenProps) => {
+const FavoritesScreen: NavigationStackScreenComponent = ({ navigation }) => {
   const favMeals = MEALS.filter((meal) => ['m1', 'm2'].includes(meal.id));
 
   return <MealList listData={favMeals} navigation={navigation} />;
 };
 
-FavoritesScreen.navigationOptions = ({
-  navigation,
-}: NavigationScreenConfigProps<
-  NavigationStackProp & NavigationDrawerProp
->): NavigationStackOptions => {
+FavoritesScreen.navigationOptions = ({ navigation }) => {
   return {
     headerTitle: 'Your Favorites',
     headerLeft() {
@@ -37,6 +22,10 @@ FavoritesScreen.navigationOptions = ({
             title="Menu"
             iconName="ios-menu"
             onPress={() => {
+              // ignoring this error because navigation als has methods
+              // from NavigationDrawerProp
+              // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+              // @ts-ignore
               navigation.toggleDrawer();
             }}
           />

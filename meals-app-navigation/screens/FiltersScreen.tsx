@@ -1,21 +1,10 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import {
-  NavigationStackScreenProps,
-  NavigationStackProp,
-  NavigationStackOptions,
-} from 'react-navigation-stack';
-import {
-  NavigationDrawerScreenProps,
-  NavigationDrawerProp,
-} from 'react-navigation-drawer';
-import { NavigationScreenConfigProps } from 'react-navigation';
+import { NavigationStackScreenComponent } from 'react-navigation-stack';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import HeaderButtonComponent from '../components/HeaderButton';
 
-const FiltersScreen = ({
-  navigation,
-}: NavigationStackScreenProps & NavigationDrawerScreenProps) => {
+const FiltersScreen: NavigationStackScreenComponent = () => {
   return (
     <View style={styles.screen}>
       <Text>The FiltersScreen</Text>
@@ -23,11 +12,7 @@ const FiltersScreen = ({
   );
 };
 
-FiltersScreen.navigationOptions = ({
-  navigation,
-}: NavigationScreenConfigProps<
-  NavigationStackProp & NavigationDrawerProp
->): NavigationStackOptions => {
+FiltersScreen.navigationOptions = ({ navigation }) => {
   return {
     headerTitle: 'Filter Meals',
     headerLeft() {
@@ -37,6 +22,10 @@ FiltersScreen.navigationOptions = ({
             title="Menu"
             iconName="ios-menu"
             onPress={() => {
+              // ignoring this error because navigation als has methods
+              // from NavigationDrawerProp
+              // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+              // @ts-ignore
               navigation.toggleDrawer();
             }}
           />
