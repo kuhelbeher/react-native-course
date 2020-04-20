@@ -6,7 +6,9 @@ import {
   TouchableOpacity,
   ImageBackground,
 } from 'react-native';
+
 import { black05, white, lightGrey } from '../config';
+import DefaultText from './DefaultText';
 
 type Props = {
   image: string;
@@ -39,9 +41,9 @@ const MealItem: React.FC<Props> = ({
             </ImageBackground>
           </View>
           <View style={{ ...styles.mealRow, ...styles.mealDetail }}>
-            <Text>{duration}m</Text>
-            <Text>{complexity.toUpperCase()}</Text>
-            <Text>{affordability.toUpperCase()}</Text>
+            <DefaultText>{duration}</DefaultText>
+            <DefaultText>{complexity.toUpperCase()}</DefaultText>
+            <DefaultText>{affordability.toUpperCase()}</DefaultText>
           </View>
         </View>
       </TouchableOpacity>
