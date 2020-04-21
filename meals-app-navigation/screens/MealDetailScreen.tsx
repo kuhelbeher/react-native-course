@@ -1,13 +1,14 @@
-import React from 'react';
+import React, { useEffect, useCallback } from 'react';
 import { StyleSheet, Image, Text, View, ScrollView } from 'react-native';
 import { NavigationStackScreenComponent } from 'react-navigation-stack';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 
 import HeaderButtonComponent from '../components/HeaderButton';
 import DefaultText from '../components/DefaultText';
 import { grey } from '../config';
 import { RootState } from '../store/reducers';
+import { toggleFavorite } from '../store/actions/meals';
 
 const ListItem: React.FC = ({ children }) => {
   return (
@@ -18,11 +19,20 @@ const ListItem: React.FC = ({ children }) => {
 };
 
 const MealDetailScreen: NavigationStackScreenComponent = ({ navigation }) => {
+  const mealId = navigation.getParam('mealId');
   const availableMeals = useSelector(
     (state: RootState) => state.meals.filteredMeals,
   );
+  const dispatch = useDispatch();
 
-  const mealId = navigation.getParam('mealId');
+  const handleToggleFavorite = useCallback(() => {
+    dispatch(toggleFavorite(mealId));
+  }, [dispatch, mealId]);
+
+  useEffect(() => {
+    navigation.setParams({ toggleFavorite: handleToggleFavorite });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [handleToggleFavorite]);
 
   const selectedMeal = availableMeals.find((meal) => meal.id === mealId);
 
@@ -61,6 +71,9 @@ const MealDetailScreen: NavigationStackScreenComponent = ({ navigation }) => {
 
 MealDetailScreen.navigationOptions = ({ navigation }) => {
   const mealTitle = navigation.getParam('mealTitle');
+  const isFavorite = navigation.getParam('isFavorite');
+
+  const handleToggleFavorite = navigation.getParam('toggleFavorite');
 
   return {
     headerTitle: mealTitle,
@@ -69,10 +82,8 @@ MealDetailScreen.navigationOptions = ({ navigation }) => {
         <HeaderButtons HeaderButtonComponent={HeaderButtonComponent}>
           <Item
             title="Favorite"
-            iconName="ios-star"
-            onPress={() => {
-              console.log('mark as favorite');
-            }}
+            iconName={isFavorite ? 'ios-star' : 'ios-star-outline'}
+            onPress={handleToggleFavorite}
           />
         </HeaderButtons>
       );

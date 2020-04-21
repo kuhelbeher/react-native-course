@@ -58,6 +58,7 @@ module.exports = {
     "@typescript-eslint/explicit-function-return-type": "off",
     "react/self-closing-comp": "error",
     "import/order": "error",
+    "react-native/no-raw-text": "off",
     "prettier/prettier": [
       "error",
       {

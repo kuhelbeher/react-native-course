@@ -1,7 +1,10 @@
 import React from 'react';
 import { StyleSheet, FlatList, View, ListRenderItemInfo } from 'react-native';
 import { NavigationStackProp } from 'react-navigation-stack';
+import { useSelector } from 'react-redux';
+
 import Meal from '../models/meal';
+import { RootState } from '../store/reducers';
 import MealItem from './MealItem';
 
 type Props = {
@@ -10,6 +13,10 @@ type Props = {
 };
 
 const MealList: React.FC<Props> = ({ listData, navigation }) => {
+  const favoriteMeals = useSelector(
+    (state: RootState) => state.meals.favoriteMeals,
+  );
+
   const renderMealItem = ({
     item: { id, imageUrl, title, duration, complexity, affordability },
   }: ListRenderItemInfo<Meal>) => {
@@ -26,6 +33,7 @@ const MealList: React.FC<Props> = ({ listData, navigation }) => {
             params: {
               mealId: id,
               mealTitle: title,
+              isFavorite: favoriteMeals.some((meal) => meal.id === id),
             },
           });
         }}
