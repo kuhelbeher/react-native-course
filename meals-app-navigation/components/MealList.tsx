@@ -1,8 +1,8 @@
 import React from 'react';
 import { StyleSheet, FlatList, View, ListRenderItemInfo } from 'react-native';
-import MealItem from './MealItem';
-import Meal from '../models/meal';
 import { NavigationStackProp } from 'react-navigation-stack';
+import Meal from '../models/meal';
+import MealItem from './MealItem';
 
 type Props = {
   listData: Meal[];
@@ -25,6 +25,7 @@ const MealList: React.FC<Props> = ({ listData, navigation }) => {
             routeName: 'MealDetail',
             params: {
               mealId: id,
+              mealTitle: title,
             },
           });
         }}

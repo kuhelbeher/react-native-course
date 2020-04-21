@@ -1,13 +1,19 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
 import { NavigationStackScreenComponent } from 'react-navigation-stack';
 
-import { CATEGORIES, MEALS } from '../data/dummy-data';
+import { CATEGORIES } from '../data/dummy-data';
 import MealList from '../components/MealList';
+import { RootState } from '../store/reducers';
 
 const CategoryMealScreen: NavigationStackScreenComponent = ({ navigation }) => {
   const categoryId = navigation.getParam('categoryId');
 
-  const displayedMeals = MEALS.filter((meal) =>
+  const availableMeals = useSelector(
+    (state: RootState) => state.meals.filteredMeals,
+  );
+
+  const displayedMeals = availableMeals.filter((meal) =>
     meal.categoryIds.includes(categoryId),
   );
 

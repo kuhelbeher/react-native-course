@@ -2,11 +2,12 @@ import React from 'react';
 import { StyleSheet, Image, Text, View, ScrollView } from 'react-native';
 import { NavigationStackScreenComponent } from 'react-navigation-stack';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
+import { useSelector } from 'react-redux';
 
 import HeaderButtonComponent from '../components/HeaderButton';
-import { MEALS } from '../data/dummy-data';
 import DefaultText from '../components/DefaultText';
 import { grey } from '../config';
+import { RootState } from '../store/reducers';
 
 const ListItem: React.FC = ({ children }) => {
   return (
@@ -17,9 +18,13 @@ const ListItem: React.FC = ({ children }) => {
 };
 
 const MealDetailScreen: NavigationStackScreenComponent = ({ navigation }) => {
+  const availableMeals = useSelector(
+    (state: RootState) => state.meals.filteredMeals,
+  );
+
   const mealId = navigation.getParam('mealId');
 
-  const selectedMeal = MEALS.find((meal) => meal.id === mealId);
+  const selectedMeal = availableMeals.find((meal) => meal.id === mealId);
 
   if (!selectedMeal) {
     return null;
@@ -55,12 +60,10 @@ const MealDetailScreen: NavigationStackScreenComponent = ({ navigation }) => {
 };
 
 MealDetailScreen.navigationOptions = ({ navigation }) => {
-  const mealId = navigation.getParam('mealId');
-
-  const { title } = MEALS.find((meal) => meal.id === mealId) || {};
+  const mealTitle = navigation.getParam('mealTitle');
 
   return {
-    headerTitle: title,
+    headerTitle: mealTitle,
     headerRight() {
       return (
         <HeaderButtons HeaderButtonComponent={HeaderButtonComponent}>
