@@ -1,7 +1,14 @@
 import React from 'react';
-import { StyleSheet, Text, View, Image, Button } from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  View,
+  Image,
+  Button,
+  TouchableNativeFeedback,
+} from 'react-native';
 
-import { COLORS } from '../../constants';
+import { COLORS, FONTS } from '../../constants';
 
 type Props = {
   uri: string;
@@ -20,21 +27,29 @@ const ProductItem: React.FC<Props> = ({
 }) => {
   return (
     <View style={styles.product}>
-      <View style={styles.imageContainer}>
-        <Image style={styles.image} source={{ uri }} />
-      </View>
-      <View style={styles.details}>
-        <Text style={styles.title}>{title}</Text>
-        <Text style={styles.price}>${price.toFixed(2)}</Text>
-      </View>
-      <View style={styles.actions}>
-        <Button
-          color={COLORS.primary}
-          title="View Details"
-          onPress={onViewDetails}
-        />
-        <Button color={COLORS.primary} title="To Cart" onPress={onAddToCart} />
-      </View>
+      <TouchableNativeFeedback onPress={onViewDetails} useForeground>
+        <View style={styles.touchable}>
+          <View style={styles.imageContainer}>
+            <Image style={styles.image} source={{ uri }} />
+          </View>
+          <View style={styles.details}>
+            <Text style={styles.title}>{title}</Text>
+            <Text style={styles.price}>${price.toFixed(2)}</Text>
+          </View>
+          <View style={styles.actions}>
+            <Button
+              color={COLORS.primary}
+              title="View Details"
+              onPress={onViewDetails}
+            />
+            <Button
+              color={COLORS.primary}
+              title="To Cart"
+              onPress={onAddToCart}
+            />
+          </View>
+        </View>
+      </TouchableNativeFeedback>
     </View>
   );
 };
@@ -67,6 +82,7 @@ const styles = StyleSheet.create({
   },
   price: {
     color: COLORS.grey,
+    fontFamily: FONTS.primary,
     fontSize: 14,
   },
   product: {
@@ -81,7 +97,12 @@ const styles = StyleSheet.create({
     shadowRadius: 8,
   },
   title: {
+    fontFamily: FONTS.primaryBold,
     fontSize: 18,
-    marginVertical: 4,
+    marginVertical: 2,
+  },
+  touchable: {
+    borderRadius: 10,
+    overflow: 'hidden',
   },
 });

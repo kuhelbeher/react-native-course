@@ -6,7 +6,9 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../../store/reducers';
 import ProductItem from '../../components/shop/ProductItem';
 
-const ProductsOverviewScreen: NavigationStackScreenComponent = () => {
+const ProductsOverviewScreen: NavigationStackScreenComponent = ({
+  navigation,
+}) => {
   const products = useSelector(
     (state: RootState) => state.products.availableProducts,
   );
@@ -20,7 +22,12 @@ const ProductsOverviewScreen: NavigationStackScreenComponent = () => {
           uri={item.imageUrl}
           title={item.title}
           price={item.price}
-          onViewDetails={() => {}}
+          onViewDetails={() => {
+            navigation.navigate('ProductDetail', {
+              productId: item.id,
+              productTitle: item.title,
+            });
+          }}
           onAddToCart={() => {}}
         />
       )}
