@@ -7,9 +7,7 @@ module.exports = {
     project: "./tsconfig.json",
     tsconfigRootDir: __dirname,
   },
-  plugins: [
-    "@typescript-eslint",
-  ],
+  plugins: ["@typescript-eslint"],
   extends: [
     "eslint:recommended",
     "plugin:@typescript-eslint/eslint-recommended",
@@ -59,6 +57,7 @@ module.exports = {
     "react/self-closing-comp": "error",
     "import/order": "error",
     "react-native/no-raw-text": "off",
+    "object-shorthand": "error",
     "prettier/prettier": [
       "error",
       {
