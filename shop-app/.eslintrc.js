@@ -58,6 +58,7 @@ module.exports = {
     "import/order": "error",
     "react-native/no-raw-text": "off",
     "object-shorthand": "error",
+    "no-else-return": "error",
     "prettier/prettier": [
       "error",
       {

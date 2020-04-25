@@ -1,4 +1,4 @@
-import { ProductsState } from '../types';
+import { ProductsState } from '../../types';
 import PRODUCTS from '../../data/data';
 
 const initialState: ProductsState = {

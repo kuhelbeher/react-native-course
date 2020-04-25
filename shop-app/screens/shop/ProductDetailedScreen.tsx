@@ -8,9 +8,10 @@ import {
   ScrollView,
 } from 'react-native';
 import { NavigationStackScreenComponent } from 'react-navigation-stack';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../../store/reducers';
 import { COLORS, FONTS } from '../../constants';
+import { addToCart } from '../../store/actions';
 
 const ProductDetailedScreen: NavigationStackScreenComponent = ({
   navigation,
@@ -23,6 +24,8 @@ const ProductDetailedScreen: NavigationStackScreenComponent = ({
     ),
   );
 
+  const dispatch = useDispatch();
+
   if (!product) {
     navigation.goBack();
     return null;
@@ -32,7 +35,13 @@ const ProductDetailedScreen: NavigationStackScreenComponent = ({
     <ScrollView>
       <Image style={styles.image} source={{ uri: product.imageUrl }} />
       <View style={styles.actions}>
-        <Button color={COLORS.primary} title="Add to cart" onPress={() => {}} />
+        <Button
+          color={COLORS.primary}
+          title="Add to cart"
+          onPress={() => {
+            dispatch(addToCart(product));
+          }}
+        />
       </View>
       <Text style={styles.price}>${product.price}</Text>
       <Text style={styles.description}>{product.description}</Text>
