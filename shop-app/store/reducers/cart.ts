@@ -1,5 +1,5 @@
-import { CartState, CartActionTypes, CartItem } from '../../types';
-import { ADD_TO_CART } from '../actions';
+import { CartState, CartActionTypes, CartItem, CartItems } from '../../types';
+import { ADD_TO_CART, REMOVE_FROM_CART } from '../actions';
 
 const initialState: CartState = {
   items: {},
@@ -37,6 +37,33 @@ const reducer = (state = initialState, action: CartActionTypes): CartState => {
         ...state,
         items: { ...state.items, [id]: newItem },
         totalAmount: state.totalAmount + price,
+      };
+    }
+    case REMOVE_FROM_CART: {
+      const item = state.items[action.id];
+
+      let items: CartItems;
+
+      if (item.quantity > 1) {
+        const updatedItem = {
+          ...item,
+          quantity: item.quantity - 1,
+          sum: item.sum - item.productPrice,
+        };
+
+        items = { ...state.items, [action.id]: updatedItem };
+      } else {
+        items = { ...state.items };
+
+        delete items[action.id];
+      }
+
+      const totalAmount = state.totalAmount - item.productPrice;
+
+      return {
+        ...state,
+        items,
+        totalAmount: totalAmount < 0 ? 0 : totalAmount,
       };
     }
     default: {

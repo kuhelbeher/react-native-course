@@ -1,4 +1,4 @@
-import { ADD_TO_CART } from '../store/actions';
+import { ADD_TO_CART, REMOVE_FROM_CART } from '../store/actions';
 import { Product } from './products';
 
 export type CartItem = {
@@ -13,11 +13,18 @@ type AddToCartAction = {
   product: Product;
 };
 
+type RemoveFromCartAction = {
+  type: typeof REMOVE_FROM_CART;
+  id: string;
+};
+
+export type CartItems = {
+  [key: string]: CartItem;
+};
+
 export type CartState = {
-  items: {
-    [key: string]: CartItem;
-  };
+  items: CartItems;
   totalAmount: number;
 };
 
-export type CartActionTypes = AddToCartAction;
+export type CartActionTypes = AddToCartAction | RemoveFromCartAction;
