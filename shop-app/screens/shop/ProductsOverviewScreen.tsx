@@ -45,6 +45,23 @@ const ProductsOverviewScreen: NavigationStackScreenComponent = ({
 ProductsOverviewScreen.navigationOptions = ({ navigation }) => {
   return {
     headerTitle: 'All Products',
+    headerLeft() {
+      return (
+        <HeaderButtons HeaderButtonComponent={HeaderButtonComponent}>
+          <Item
+            title="Menu"
+            iconName={Platform.OS === 'android' ? 'md-menu' : 'ios-menu'}
+            onPress={() => {
+              // ignoring this error because navigation also has methods
+              // from NavigationDrawerProp
+              // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+              // @ts-ignore
+              navigation.toggleDrawer();
+            }}
+          />
+        </HeaderButtons>
+      );
+    },
     headerRight() {
       return (
         <HeaderButtons HeaderButtonComponent={HeaderButtonComponent}>

@@ -1,12 +1,12 @@
-import { CartState, CartActionTypes, CartItem, CartItems } from '../../types';
-import { ADD_TO_CART, REMOVE_FROM_CART } from '../actions';
+import { CartState, CartItem, CartItems, ActionTypes } from '../../types';
+import { ADD_TO_CART, REMOVE_FROM_CART, ADD_ORDER } from '../actions';
 
 const initialState: CartState = {
   items: {},
   totalAmount: 0,
 };
 
-const reducer = (state = initialState, action: CartActionTypes): CartState => {
+const reducer = (state = initialState, action: ActionTypes): CartState => {
   switch (action.type) {
     case ADD_TO_CART: {
       const {
@@ -65,6 +65,9 @@ const reducer = (state = initialState, action: CartActionTypes): CartState => {
         items,
         totalAmount: totalAmount < 0 ? 0 : totalAmount,
       };
+    }
+    case ADD_ORDER: {
+      return initialState;
     }
     default: {
       return state;

@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { NavigationStackScreenComponent } from 'react-navigation-stack';
 
 import { RootState } from '../../store/reducers';
-import { removeFromCart } from '../../store/actions';
+import { removeFromCart, addOrder } from '../../store/actions';
 import { COLORS, FONTS } from '../../constants';
 import CartItem from '../../components/shop/CartItem';
 
@@ -28,7 +28,9 @@ const CartScreen: NavigationStackScreenComponent = () => {
           title="Order Now"
           color={COLORS.accent}
           disabled={!cartItems.length}
-          onPress={() => {}}
+          onPress={() => {
+            dispatch(addOrder(cartItems, totalAmount));
+          }}
         />
       </View>
       <FlatList
@@ -47,6 +49,10 @@ const CartScreen: NavigationStackScreenComponent = () => {
       />
     </View>
   );
+};
+
+CartScreen.navigationOptions = {
+  headerTitle: 'Your Cart',
 };
 
 export default CartScreen;
