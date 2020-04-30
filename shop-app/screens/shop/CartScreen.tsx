@@ -38,6 +38,7 @@ const CartScreen: NavigationStackScreenComponent = () => {
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
           <CartItem
+            removable
             quantity={item.quantity}
             title={item.productTitle}
             amount={item.sum}

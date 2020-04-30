@@ -13,10 +13,17 @@ type Props = {
   quantity: number;
   title: string;
   amount: number;
-  onRemove: () => void;
+  removable?: boolean;
+  onRemove?: () => void;
 };
 
-const CartItem: React.FC<Props> = ({ quantity, title, amount, onRemove }) => {
+const CartItem: React.FC<Props> = ({
+  quantity,
+  title,
+  amount,
+  removable,
+  onRemove,
+}) => {
   return (
     <View style={styles.cartItem}>
       <View style={styles.itemData}>
@@ -25,15 +32,17 @@ const CartItem: React.FC<Props> = ({ quantity, title, amount, onRemove }) => {
       </View>
       <View style={styles.itemData}>
         <Text style={styles.mainText}>{amount.toFixed(2)}</Text>
-        <TouchableNativeFeedback onPress={onRemove} useForeground>
-          <View style={styles.deleteButton}>
-            <Ionicons
-              name={Platform.OS === 'android' ? 'md-trash' : 'ios-trash'}
-              size={23}
-              color={COLORS.red}
-            />
-          </View>
-        </TouchableNativeFeedback>
+        {removable && (
+          <TouchableNativeFeedback onPress={onRemove} useForeground>
+            <View style={styles.deleteButton}>
+              <Ionicons
+                name={Platform.OS === 'android' ? 'md-trash' : 'ios-trash'}
+                size={23}
+                color={COLORS.red}
+              />
+            </View>
+          </TouchableNativeFeedback>
+        )}
       </View>
     </View>
   );

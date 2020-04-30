@@ -2,6 +2,7 @@ import { ADD_TO_CART, REMOVE_FROM_CART } from '../store/actions';
 import { Product } from './products';
 
 export type CartItem = {
+  id: string;
   quantity: number;
   productPrice: number;
   productTitle: string;

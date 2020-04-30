@@ -6,6 +6,7 @@ import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 
 import { RootState } from '../../store/reducers';
 import HeaderButtonComponent from '../../components/UI/HeaderButton';
+import OrderItem from '../../components/shop/OrderItem';
 
 const OrdersScreen: NavigationStackScreenComponent = () => {
   const orders = useSelector((state: RootState) => state.orders.orders);
@@ -13,7 +14,13 @@ const OrdersScreen: NavigationStackScreenComponent = () => {
   return (
     <FlatList
       data={orders}
-      renderItem={(itemData) => <Text>{itemData.item.totalAmount}</Text>}
+      renderItem={({ item }) => (
+        <OrderItem
+          amount={item.totalAmount}
+          date={item.date}
+          items={item.items}
+        />
+      )}
     />
   );
 };
