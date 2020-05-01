@@ -1,5 +1,10 @@
 import { CartState, CartItem, CartItems, ActionTypes } from '../../types';
-import { ADD_TO_CART, REMOVE_FROM_CART, ADD_ORDER } from '../actions';
+import {
+  ADD_TO_CART,
+  REMOVE_FROM_CART,
+  ADD_ORDER,
+  DELETE_PRODUCT,
+} from '../actions';
 
 const initialState: CartState = {
   items: {},
@@ -26,6 +31,7 @@ const reducer = (state = initialState, action: ActionTypes): CartState => {
         };
       } else {
         newItem = {
+          id,
           quantity: 1,
           productPrice: price,
           productTitle: title,
@@ -68,6 +74,15 @@ const reducer = (state = initialState, action: ActionTypes): CartState => {
     }
     case ADD_ORDER: {
       return initialState;
+    }
+    case DELETE_PRODUCT: {
+      const { [action.id]: deleted, ...items } = state.items;
+
+      return {
+        ...state,
+        items,
+        totalAmount: state.totalAmount - deleted.sum,
+      };
     }
     default: {
       return state;

@@ -4,7 +4,6 @@ import {
   Text,
   View,
   Image,
-  Button,
   TouchableNativeFeedback,
 } from 'react-native';
 
@@ -14,20 +13,19 @@ type Props = {
   uri: string;
   title: string;
   price: number;
-  onViewDetails: () => void;
-  onAddToCart: () => void;
+  onSelect: () => void;
 };
 
 const ProductItem: React.FC<Props> = ({
   uri,
   title,
   price,
-  onViewDetails,
-  onAddToCart,
+  children,
+  onSelect,
 }) => {
   return (
     <View style={styles.product}>
-      <TouchableNativeFeedback onPress={onViewDetails} useForeground>
+      <TouchableNativeFeedback onPress={onSelect} useForeground>
         <View style={styles.touchable}>
           <View style={styles.imageContainer}>
             <Image style={styles.image} source={{ uri }} />
@@ -36,18 +34,7 @@ const ProductItem: React.FC<Props> = ({
             <Text style={styles.title}>{title}</Text>
             <Text style={styles.price}>${price.toFixed(2)}</Text>
           </View>
-          <View style={styles.actions}>
-            <Button
-              color={COLORS.primary}
-              title="View Details"
-              onPress={onViewDetails}
-            />
-            <Button
-              color={COLORS.primary}
-              title="To Cart"
-              onPress={onAddToCart}
-            />
-          </View>
+          <View style={styles.actions}>{children}</View>
         </View>
       </TouchableNativeFeedback>
     </View>

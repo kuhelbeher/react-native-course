@@ -1,5 +1,5 @@
 import React from 'react';
-import { FlatList, Platform } from 'react-native';
+import { FlatList, Platform, Button } from 'react-native';
 import { NavigationStackScreenComponent } from 'react-navigation-stack';
 import { useSelector, useDispatch } from 'react-redux';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
@@ -8,6 +8,8 @@ import { RootState } from '../../store/reducers';
 import ProductItem from '../../components/shop/ProductItem';
 import { addToCart } from '../../store/actions';
 import HeaderButtonComponent from '../../components/UI/HeaderButton';
+import { COLORS } from '../../constants';
+import { Product } from '../../types';
 
 const ProductsOverviewScreen: NavigationStackScreenComponent = ({
   navigation,
@@ -18,6 +20,13 @@ const ProductsOverviewScreen: NavigationStackScreenComponent = ({
 
   const dispatch = useDispatch();
 
+  const handleSelectItem = (item: Product) => {
+    navigation.navigate('ProductDetail', {
+      productId: item.id,
+      productTitle: item.title,
+    });
+  };
+
   return (
     <FlatList
       data={products}
@@ -27,16 +36,20 @@ const ProductsOverviewScreen: NavigationStackScreenComponent = ({
           uri={item.imageUrl}
           title={item.title}
           price={item.price}
-          onViewDetails={() => {
-            navigation.navigate('ProductDetail', {
-              productId: item.id,
-              productTitle: item.title,
-            });
-          }}
-          onAddToCart={() => {
-            dispatch(addToCart(item));
-          }}
-        />
+          onSelect={() => handleSelectItem(item)}>
+          <Button
+            color={COLORS.primary}
+            title="View Details"
+            onPress={() => handleSelectItem(item)}
+          />
+          <Button
+            color={COLORS.primary}
+            title="To Cart"
+            onPress={() => {
+              dispatch(addToCart(item));
+            }}
+          />
+        </ProductItem>
       )}
     />
   );
