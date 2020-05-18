@@ -1,6 +1,6 @@
-import { ProductsState, ActionTypes } from '../../types';
+import { ProductsState, ActionTypes, Product } from '../../types';
 import PRODUCTS from '../../data/data';
-import { DELETE_PRODUCT } from '../actions';
+import { DELETE_PRODUCT, CREATE_PRODUCT, UPDATE_PRODUCT } from '../actions';
 
 const initialState: ProductsState = {
   availableProducts: PRODUCTS,
@@ -18,6 +18,44 @@ const reducer = (state = initialState, action: ActionTypes): ProductsState => {
         availableProducts: state.availableProducts.filter(
           (product) => product.id !== action.id,
         ),
+      };
+    }
+    case CREATE_PRODUCT: {
+      const newProduct: Product = {
+        id: new Date().toString(),
+        ownerId: 'u1',
+        ...action.payload,
+      };
+
+      return {
+        ...state,
+        availableProducts: [...state.availableProducts, newProduct],
+        userProducts: [...state.userProducts, newProduct],
+      };
+    }
+    case UPDATE_PRODUCT: {
+      const userProductIndex = state.userProducts.findIndex(
+        (product) => product.id === action.payload.id,
+      );
+      const availableProductIndex = state.availableProducts.findIndex(
+        (product) => product.id === action.payload.id,
+      );
+
+      const updatedProduct: Product = {
+        ...state.userProducts[userProductIndex],
+        ...action.payload,
+      };
+
+      const availableProducts = [...state.availableProducts];
+      const userProducts = [...state.userProducts];
+
+      availableProducts[availableProductIndex] = updatedProduct;
+      userProducts[userProductIndex] = updatedProduct;
+
+      return {
+        ...state,
+        availableProducts,
+        userProducts,
       };
     }
     default: {

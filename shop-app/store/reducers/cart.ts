@@ -81,7 +81,7 @@ const reducer = (state = initialState, action: ActionTypes): CartState => {
       return {
         ...state,
         items,
-        totalAmount: state.totalAmount - deleted.sum,
+        totalAmount: state.totalAmount - deleted?.sum,
       };
     }
     default: {
