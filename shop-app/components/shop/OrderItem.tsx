@@ -4,6 +4,7 @@ import { StyleSheet, Text, View, Button } from 'react-native';
 import { COLORS, FONTS } from '../../constants';
 import { formatDate } from '../../utils';
 import { CartItem as CartItemType } from '../../types';
+import Card from '../UI/Card';
 import CartItem from './CartItem';
 
 type Props = {
@@ -16,7 +17,7 @@ const OrderItem: React.FC<Props> = ({ amount, date, items }) => {
   const [showDetails, setShowDetails] = useState(false);
 
   return (
-    <View style={styles.orderItem}>
+    <Card style={styles.orderItem}>
       <View style={styles.summary}>
         <Text style={styles.totalAmount}>${amount.toFixed(2)}</Text>
         <Text style={styles.date}>{formatDate(date)}</Text>
@@ -40,7 +41,7 @@ const OrderItem: React.FC<Props> = ({ amount, date, items }) => {
           ))}
         </View>
       )}
-    </View>
+    </Card>
   );
 };
 
@@ -57,15 +58,8 @@ const styles = StyleSheet.create({
   },
   orderItem: {
     alignItems: 'center',
-    backgroundColor: COLORS.white,
-    borderRadius: 10,
-    elevation: 5,
     margin: 20,
     padding: 10,
-    shadowColor: COLORS.black,
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.26,
-    shadowRadius: 8,
   },
   summary: {
     alignItems: 'center',

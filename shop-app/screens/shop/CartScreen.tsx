@@ -7,6 +7,7 @@ import { RootState } from '../../store/reducers';
 import { removeFromCart, addOrder } from '../../store/actions';
 import { COLORS, FONTS } from '../../constants';
 import CartItem from '../../components/shop/CartItem';
+import Card from '../../components/UI/Card';
 
 const CartScreen: NavigationStackScreenComponent = () => {
   const totalAmount = useSelector((state: RootState) => state.cart.totalAmount);
@@ -20,7 +21,7 @@ const CartScreen: NavigationStackScreenComponent = () => {
 
   return (
     <View style={styles.screen}>
-      <View style={styles.summary}>
+      <Card style={styles.summary}>
         <Text style={styles.summaryText}>
           Total: <Text style={styles.amount}>${totalAmount.toFixed(2)}</Text>
         </Text>
@@ -32,7 +33,7 @@ const CartScreen: NavigationStackScreenComponent = () => {
             dispatch(addOrder(cartItems, totalAmount));
           }}
         />
-      </View>
+      </Card>
       <FlatList
         data={cartItems}
         keyExtractor={(item) => item.id}
@@ -67,17 +68,10 @@ const styles = StyleSheet.create({
   },
   summary: {
     alignItems: 'center',
-    backgroundColor: COLORS.white,
-    borderRadius: 10,
-    elevation: 5,
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginBottom: 20,
     padding: 10,
-    shadowColor: COLORS.black,
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.26,
-    shadowRadius: 8,
   },
   summaryText: {
     fontFamily: FONTS.primaryBold,

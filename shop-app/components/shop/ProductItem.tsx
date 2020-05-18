@@ -7,6 +7,7 @@ import {
   TouchableNativeFeedback,
 } from 'react-native';
 
+import Card from '../UI/Card';
 import { COLORS, FONTS } from '../../constants';
 
 type Props = {
@@ -24,7 +25,7 @@ const ProductItem: React.FC<Props> = ({
   onSelect,
 }) => {
   return (
-    <View style={styles.product}>
+    <Card style={styles.product}>
       <TouchableNativeFeedback onPress={onSelect} useForeground>
         <View style={styles.touchable}>
           <View style={styles.imageContainer}>
@@ -37,7 +38,7 @@ const ProductItem: React.FC<Props> = ({
           <View style={styles.actions}>{children}</View>
         </View>
       </TouchableNativeFeedback>
-    </View>
+    </Card>
   );
 };
 
@@ -73,15 +74,8 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
   product: {
-    backgroundColor: COLORS.white,
-    borderRadius: 10,
-    elevation: 5,
     height: 300,
     margin: 20,
-    shadowColor: COLORS.black,
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.26,
-    shadowRadius: 8,
   },
   title: {
     fontFamily: FONTS.primaryBold,

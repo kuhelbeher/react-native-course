@@ -16,12 +16,10 @@ import { addToCart } from '../../store/actions';
 const ProductDetailedScreen: NavigationStackScreenComponent = ({
   navigation,
 }) => {
-  const productId = navigation.getParam('productId');
+  const id = navigation.getParam('productId');
 
   const product = useSelector((state: RootState) =>
-    state.products.availableProducts.find(
-      (product) => product.id === productId,
-    ),
+    state.products.availableProducts.find((product) => product.id === id),
   );
 
   const dispatch = useDispatch();
