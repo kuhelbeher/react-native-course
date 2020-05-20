@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useEffect, useCallback, useReducer } from 'react';
 import {
   StyleSheet,
   Text,
@@ -6,6 +6,7 @@ import {
   ScrollView,
   View,
   Platform,
+  Alert,
 } from 'react-native';
 import { NavigationStackScreenComponent } from 'react-navigation-stack';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
@@ -14,6 +15,65 @@ import { FONTS, COLORS } from '../../constants';
 import HeaderButtonComponent from '../../components/UI/HeaderButton';
 import { RootState } from '../../store/reducers';
 import { updateProduct, createProduct } from '../../store/actions';
+
+const FORM_INPUT_UPDATE = 'FORM_INPUT_UPDATE';
+
+type FormReducerState = {
+  inputValues: {
+    title: string;
+    imageUrl: string;
+    price: string;
+    description: string;
+  };
+  inputValidities: {
+    title: boolean;
+    imageUrl: boolean;
+    price: boolean;
+    description: boolean;
+  };
+  formIsValid: boolean;
+};
+
+type NameType = keyof FormReducerState['inputValues'];
+
+type UpdateReducerAction = {
+  type: typeof FORM_INPUT_UPDATE;
+  name: NameType;
+  isValid: boolean;
+  value: string;
+};
+
+type FormReducerActions = UpdateReducerAction;
+
+const formReducer = (
+  state: FormReducerState,
+  action: FormReducerActions,
+): FormReducerState => {
+  switch (action.type) {
+    case FORM_INPUT_UPDATE: {
+      const inputValues = {
+        ...state.inputValues,
+        [action.name]: action.value,
+      };
+      const inputValidities = {
+        ...state.inputValidities,
+        [action.name]: action.isValid,
+      };
+
+      return {
+        ...state,
+        inputValues,
+        inputValidities,
+        formIsValid: Object.values(inputValidities).some(
+          (validity) => validity,
+        ),
+      };
+    }
+    default: {
+      throw new Error('Invalid type for formReducer');
+    }
+  }
+};
 
 const EditProductScreen: NavigationStackScreenComponent = ({ navigation }) => {
   const id = navigation.getParam('id');
@@ -24,45 +84,63 @@ const EditProductScreen: NavigationStackScreenComponent = ({ navigation }) => {
     state.products.userProducts.find((product) => product.id === id),
   );
 
-  const [values, setValues] = useState({
-    title: editedProduct ? editedProduct.title : '',
-    imageUrl: editedProduct ? editedProduct.imageUrl : '',
-    price: editedProduct ? editedProduct.price.toString() : '',
-    description: editedProduct ? editedProduct.description : '',
+  const [formState, formDispatch] = useReducer(formReducer, {
+    inputValues: {
+      title: editedProduct ? editedProduct.title : '',
+      imageUrl: editedProduct ? editedProduct.imageUrl : '',
+      price: '',
+      description: editedProduct ? editedProduct.description : '',
+    },
+    inputValidities: {
+      title: editedProduct ? true : false,
+      imageUrl: editedProduct ? true : false,
+      price: editedProduct ? true : false,
+      description: editedProduct ? true : false,
+    },
+    formIsValid: editedProduct ? true : false,
   });
 
   const handleSubmit = useCallback(() => {
+    if (!formState.formIsValid) {
+      Alert.alert('Wrong input!', 'Please check the errors in the form.', [
+        { text: 'Okay' },
+      ]);
+      return;
+    }
+
     if (editedProduct) {
       dispatch(
         updateProduct({
           id,
-          title: values.title,
-          imageUrl: values.imageUrl,
-          description: values.description,
+          title: formState.inputValues.title,
+          imageUrl: formState.inputValues.imageUrl,
+          description: formState.inputValues.description,
         }),
       );
     } else {
       dispatch(
         createProduct({
-          title: values.title,
-          imageUrl: values.imageUrl,
-          description: values.description,
-          price: parseFloat(values.price),
+          title: formState.inputValues.title,
+          imageUrl: formState.inputValues.imageUrl,
+          description: formState.inputValues.description,
+          price: parseFloat(formState.inputValues.price),
         }),
       );
     }
 
     navigation.goBack();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dispatch, editedProduct, id, values]);
+  }, [dispatch, editedProduct, id, formState]);
 
   useEffect(() => {
     navigation.setParams({ submit: handleSubmit });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [handleSubmit]);
 
-  const handleChangeText = (name: keyof typeof values, value: string) => {
-    setValues({ ...values, [name]: value });
+  const handleChangeText = (name: NameType, value: string) => {
+    const isValid = value.trim().length > 0;
+
+    formDispatch({ type: FORM_INPUT_UPDATE, value, isValid, name });
   };
 
   return (
@@ -72,15 +150,22 @@ const EditProductScreen: NavigationStackScreenComponent = ({ navigation }) => {
           <Text style={styles.label}>Title</Text>
           <TextInput
             style={styles.input}
-            value={values.title}
+            value={formState.inputValues.title}
             onChangeText={(value) => handleChangeText('title', value)}
+            keyboardType="default"
+            autoCapitalize="sentences"
+            autoCorrect
+            returnKeyType="next"
           />
+          {!formState.inputValidities.title && (
+            <Text>Please enter valid title</Text>
+          )}
         </View>
         <View style={styles.formControl}>
           <Text style={styles.label}>Image URL</Text>
           <TextInput
             style={styles.input}
-            value={values.imageUrl}
+            value={formState.inputValues.imageUrl}
             onChangeText={(value) => handleChangeText('imageUrl', value)}
           />
         </View>
@@ -89,8 +174,9 @@ const EditProductScreen: NavigationStackScreenComponent = ({ navigation }) => {
             <Text style={styles.label}>Price</Text>
             <TextInput
               style={styles.input}
-              value={values.price}
+              value={formState.inputValues.price}
               onChangeText={(value) => handleChangeText('price', value)}
+              keyboardType="decimal-pad"
             />
           </View>
         )}
@@ -98,7 +184,7 @@ const EditProductScreen: NavigationStackScreenComponent = ({ navigation }) => {
           <Text style={styles.label}>Description</Text>
           <TextInput
             style={styles.input}
-            value={values.description}
+            value={formState.inputValues.description}
             onChangeText={(value) => handleChangeText('description', value)}
           />
         </View>
