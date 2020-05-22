@@ -40,9 +40,9 @@ export const fetchProducts = (): AppThunk => async (dispatch) => {
   }
 };
 
-export const deleteProduct = (id: string): ProductActionTypes => ({
+export const deleteProduct = (payload: string): ProductActionTypes => ({
   type: DELETE_PRODUCT,
-  id,
+  payload,
 });
 
 export const createProductSuccess = (

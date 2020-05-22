@@ -27,7 +27,7 @@ type SetProductsAction = {
 
 type DeleteProductAction = {
   type: typeof DELETE_PRODUCT;
-  id: string;
+  payload: string;
 };
 
 type CreateProductAction = {

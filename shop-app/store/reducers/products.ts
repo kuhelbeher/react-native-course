@@ -26,10 +26,10 @@ const reducer = (state = initialState, action: ActionTypes): ProductsState => {
       return {
         ...state,
         userProducts: state.userProducts.filter(
-          (product) => product.id !== action.id,
+          (product) => product.id !== action.payload,
         ),
         availableProducts: state.availableProducts.filter(
-          (product) => product.id !== action.id,
+          (product) => product.id !== action.payload,
         ),
       };
     }
