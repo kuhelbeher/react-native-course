@@ -142,10 +142,7 @@ const EditProductScreen: NavigationStackScreenComponent = ({ navigation }) => {
   );
 
   return (
-    <KeyboardAvoidingView
-      style={styles.keyboardAvoidingView}
-      behavior="padding"
-      keyboardVerticalOffset={100}>
+    <KeyboardAvoidingView style={styles.keyboardAvoidingView} behavior="height">
       <ScrollView>
         <View style={styles.form}>
           <Input

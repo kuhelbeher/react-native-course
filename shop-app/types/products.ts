@@ -13,7 +13,7 @@ export type Product = {
   price: number;
 };
 
-export type CreateProductPayload = Omit<Product, 'id' | 'ownerId'>;
+export type CreateProductPayload = Omit<Product, 'ownerId'>;
 
 export type UpdateProductPayload = Omit<Product, 'ownerId' | 'price'>;
 

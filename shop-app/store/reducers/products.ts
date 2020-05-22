@@ -22,7 +22,6 @@ const reducer = (state = initialState, action: ActionTypes): ProductsState => {
     }
     case CREATE_PRODUCT: {
       const newProduct: Product = {
-        id: new Date().toString(),
         ownerId: 'u1',
         ...action.payload,
       };

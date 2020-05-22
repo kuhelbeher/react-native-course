@@ -1,4 +1,5 @@
-import { combineReducers, createStore } from 'redux';
+import { combineReducers, createStore, applyMiddleware } from 'redux';
+import reduxThunkMiddleware from 'redux-thunk';
 // eslint-disable-next-line import/no-unresolved
 import { composeWithDevTools } from 'redux-devtools-extension/developmentOnly';
 
@@ -14,6 +15,9 @@ const rootReducer = combineReducers({
 
 export type RootState = ReturnType<typeof rootReducer>;
 
-const store = createStore(rootReducer, composeWithDevTools());
+const store = createStore(
+  rootReducer,
+  composeWithDevTools(applyMiddleware(reduxThunkMiddleware)),
+);
 
 export default store;
