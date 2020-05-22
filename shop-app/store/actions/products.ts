@@ -3,12 +3,42 @@ import {
   CreateProductPayload,
   UpdateProductPayload,
   AppThunk,
+  Product,
+  ProductResponseType,
 } from '../../types';
 import { apiUrl } from '../../config';
 
 export const DELETE_PRODUCT = 'DELETE_PRODUCT';
 export const CREATE_PRODUCT = 'CREATE_PRODUCT';
 export const UPDATE_PRODUCT = 'UPDATE_PRODUCT';
+export const SET_PRODUCTS = 'SET_PRODUCTS';
+
+const setProducts = (payload: Product[]): ProductActionTypes => ({
+  type: SET_PRODUCTS,
+  payload,
+});
+
+export const fetchProducts = (): AppThunk => async (dispatch) => {
+  try {
+    const res = await fetch(`${apiUrl}/products.json`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    const data: { [id: string]: ProductResponseType } = await res.json();
+
+    const products: Product[] = Object.entries(data).map(([id, product]) => ({
+      id,
+      ...product,
+    }));
+
+    dispatch(setProducts(products));
+  } catch (error) {
+    console.log(error);
+  }
+};
 
 export const deleteProduct = (id: string): ProductActionTypes => ({
   type: DELETE_PRODUCT,
@@ -34,7 +64,7 @@ export const createProduct = (
       body: JSON.stringify(payload),
     });
 
-    const data = await res.json();
+    const data: { name: string } = await res.json();
 
     dispatch(
       createProductSuccess({

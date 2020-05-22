@@ -2,6 +2,7 @@ import {
   DELETE_PRODUCT,
   CREATE_PRODUCT,
   UPDATE_PRODUCT,
+  SET_PRODUCTS,
 } from '../store/actions';
 
 export type Product = {
@@ -13,9 +14,16 @@ export type Product = {
   price: number;
 };
 
+export type ProductResponseType = Omit<Product, 'id'>;
+
 export type CreateProductPayload = Omit<Product, 'ownerId'>;
 
 export type UpdateProductPayload = Omit<Product, 'ownerId' | 'price'>;
+
+type SetProductsAction = {
+  type: typeof SET_PRODUCTS;
+  payload: Product[];
+};
 
 type DeleteProductAction = {
   type: typeof DELETE_PRODUCT;
@@ -40,4 +48,5 @@ export type ProductsState = {
 export type ProductActionTypes =
   | DeleteProductAction
   | CreateProductAction
-  | UpdateProductAction;
+  | UpdateProductAction
+  | SetProductsAction;

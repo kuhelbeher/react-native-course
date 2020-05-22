@@ -1,14 +1,27 @@
 import { ProductsState, ActionTypes, Product } from '../../types';
-import PRODUCTS from '../../data/data';
-import { DELETE_PRODUCT, CREATE_PRODUCT, UPDATE_PRODUCT } from '../actions';
+import {
+  DELETE_PRODUCT,
+  CREATE_PRODUCT,
+  UPDATE_PRODUCT,
+  SET_PRODUCTS,
+} from '../actions';
 
 const initialState: ProductsState = {
-  availableProducts: PRODUCTS,
-  userProducts: PRODUCTS.filter((product) => product.ownerId === 'u1'),
+  availableProducts: [],
+  userProducts: [],
 };
 
 const reducer = (state = initialState, action: ActionTypes): ProductsState => {
   switch (action.type) {
+    case SET_PRODUCTS: {
+      return {
+        ...state,
+        availableProducts: action.payload,
+        userProducts: action.payload.filter(
+          (product) => product.ownerId === 'u1',
+        ),
+      };
+    }
     case DELETE_PRODUCT: {
       return {
         ...state,
