@@ -37,15 +37,26 @@ export const fetchProducts = (): AppThunk<Promise<void>> => async (
   const products: Product[] = Object.entries(data).map(([id, product]) => ({
     id,
     ...product,
+    ownerId: 'u1', // TODO: remove after adding the users
   }));
 
   dispatch(setProducts(products));
 };
 
-export const deleteProduct = (payload: string): ProductActionTypes => ({
+export const deleteProductSuccess = (payload: string): ProductActionTypes => ({
   type: DELETE_PRODUCT,
   payload,
 });
+
+export const deleteProduct = (
+  payload: string,
+): AppThunk<Promise<void>> => async (dispatch) => {
+  await fetch(`${apiUrl}/products/${payload}.json`, {
+    method: 'DELETE',
+  });
+
+  dispatch(deleteProductSuccess(payload));
+};
 
 export const createProductSuccess = (
   payload: CreateProductPayload,
@@ -55,8 +66,8 @@ export const createProductSuccess = (
 });
 
 export const createProduct = (
-  payload: CreateProductPayload,
-): AppThunk => async (dispatch) => {
+  payload: Omit<CreateProductPayload, 'id'>,
+): AppThunk<Promise<void>> => async (dispatch) => {
   try {
     const res = await fetch(`${apiUrl}/products.json`, {
       method: 'POST',
@@ -79,9 +90,29 @@ export const createProduct = (
   }
 };
 
-export const updateProduct = (
+export const updateProductSuccess = (
   payload: UpdateProductPayload,
 ): ProductActionTypes => ({
   type: UPDATE_PRODUCT,
   payload,
 });
+
+export const updateProduct = ({
+  id,
+  ...payload
+}: UpdateProductPayload): AppThunk<Promise<void>> => async (dispatch) => {
+  await fetch(`${apiUrl}/products/${id}.json`, {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(payload),
+  });
+
+  dispatch(
+    updateProductSuccess({
+      id,
+      ...payload,
+    }),
+  );
+};

@@ -46,6 +46,15 @@ const ProductsOverviewScreen: NavigationStackScreenComponent = ({
     handleFetchProducts();
   }, [handleFetchProducts]);
 
+  useEffect(() => {
+    const willFocusSub = navigation.addListener('willFocus', () => {
+      handleFetchProducts();
+    });
+
+    return willFocusSub.remove;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [handleFetchProducts]);
+
   const handleSelectItem = (item: Product) => {
     navigation.navigate('ProductDetail', {
       productId: item.id,

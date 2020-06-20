@@ -98,6 +98,7 @@ const EditProductScreen: NavigationStackScreenComponent = ({ navigation }) => {
   });
 
   const handleSubmit = useCallback(() => {
+    console.log(formState);
     if (!formState.formIsValid) {
       Alert.alert('Wrong input!', 'Please check the errors in the form.', [
         { text: 'Okay' },
