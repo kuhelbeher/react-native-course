@@ -1,4 +1,4 @@
-import { ThunkAction } from 'redux-thunk';
+import { ThunkAction, ThunkDispatch } from 'redux-thunk';
 import { RootState } from '../store/reducers';
 import { CartActionTypes } from './cart';
 import { OrderActionTypes } from './orders';
@@ -19,3 +19,5 @@ export type AppThunk<ReturnType = void> = ThunkAction<
   unknown,
   ActionTypes
 >;
+
+export type AppThunkDispatch = ThunkDispatch<RootState, undefined, ActionTypes>;

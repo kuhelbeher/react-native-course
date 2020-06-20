@@ -18,26 +18,28 @@ const setProducts = (payload: Product[]): ProductActionTypes => ({
   payload,
 });
 
-export const fetchProducts = (): AppThunk => async (dispatch) => {
-  try {
-    const res = await fetch(`${apiUrl}/products.json`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
+export const fetchProducts = (): AppThunk<Promise<void>> => async (
+  dispatch,
+) => {
+  const res = await fetch(`${apiUrl}/products.json`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
 
-    const data: { [id: string]: ProductResponseType } = await res.json();
-
-    const products: Product[] = Object.entries(data).map(([id, product]) => ({
-      id,
-      ...product,
-    }));
-
-    dispatch(setProducts(products));
-  } catch (error) {
-    console.log(error);
+  if (!res.ok) {
+    throw new Error('Something went wrong');
   }
+
+  const data: { [id: string]: ProductResponseType } = await res.json();
+
+  const products: Product[] = Object.entries(data).map(([id, product]) => ({
+    id,
+    ...product,
+  }));
+
+  dispatch(setProducts(products));
 };
 
 export const deleteProduct = (payload: string): ProductActionTypes => ({
