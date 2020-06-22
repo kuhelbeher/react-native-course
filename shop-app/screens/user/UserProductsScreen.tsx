@@ -4,9 +4,7 @@ import {
   Platform,
   Button,
   Alert,
-  View,
   ActivityIndicator,
-  StyleSheet,
 } from 'react-native';
 import { NavigationStackScreenComponent } from 'react-navigation-stack';
 import { useSelector, useDispatch } from 'react-redux';
@@ -44,9 +42,7 @@ const UserProductsScreen: NavigationStackScreenComponent = ({ navigation }) => {
           try {
             await dispatch(deleteProduct(id));
           } catch (error) {
-            Alert.alert('An error ocurred!', error.message || '', [
-              { text: 'Okay' },
-            ]);
+            Alert.alert('An error ocurred!', error.message, [{ text: 'Okay' }]);
           }
 
           setIsLoading(false);
@@ -54,14 +50,6 @@ const UserProductsScreen: NavigationStackScreenComponent = ({ navigation }) => {
       },
     ]);
   };
-
-  if (isLoading) {
-    return (
-      <View style={styles.centered}>
-        <ActivityIndicator size="large" color={COLORS.primary} />
-      </View>
-    );
-  }
 
   return (
     <FlatList
@@ -82,11 +70,15 @@ const UserProductsScreen: NavigationStackScreenComponent = ({ navigation }) => {
               handleEditProduct(item.id);
             }}
           />
-          <Button
-            color={COLORS.primary}
-            title="Delete"
-            onPress={() => handleDelete(item.id)}
-          />
+          {isLoading ? (
+            <ActivityIndicator size="small" color={COLORS.primary} />
+          ) : (
+            <Button
+              color={COLORS.primary}
+              title="Delete"
+              onPress={() => handleDelete(item.id)}
+            />
+          )}
         </ProductItem>
       )}
     />
@@ -128,11 +120,3 @@ UserProductsScreen.navigationOptions = ({ navigation }) => ({
 });
 
 export default UserProductsScreen;
-
-const styles = StyleSheet.create({
-  centered: {
-    alignItems: 'center',
-    flex: 1,
-    justifyContent: 'center',
-  },
-});

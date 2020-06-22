@@ -10,10 +10,7 @@ export type Order = {
 
 type AddOrderAction = {
   type: typeof ADD_ORDER;
-  orderData: {
-    items: CartItem[];
-    amount: number;
-  };
+  payload: Order;
 };
 
 export type OrdersState = {
