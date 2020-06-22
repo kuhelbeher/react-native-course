@@ -21,6 +21,7 @@ import { COLORS } from '../../constants';
 
 const OrdersScreen: NavigationStackScreenComponent = () => {
   const [isLoading, setIsLoading] = useState(false);
+  const [isRefreshing, setIsRefreshing] = useState(false);
   const [error, setError] = useState(null);
 
   const orders = useSelector((state: RootState) => state.orders.orders);
@@ -28,7 +29,7 @@ const OrdersScreen: NavigationStackScreenComponent = () => {
   const dispatch = useDispatch<AppThunkDispatch>();
 
   const handleFetchOrders = useCallback(async () => {
-    setIsLoading(true);
+    setIsRefreshing(true);
     setError(null);
 
     try {
@@ -36,11 +37,14 @@ const OrdersScreen: NavigationStackScreenComponent = () => {
     } catch (error) {
       setError(error.message);
     }
-    setIsLoading(false);
+    setIsRefreshing(false);
   }, [dispatch]);
 
   useEffect(() => {
-    handleFetchOrders();
+    setIsLoading(true);
+    handleFetchOrders().then(() => {
+      setIsLoading(false);
+    });
   }, [handleFetchOrders]);
 
   if (error) {
@@ -74,6 +78,8 @@ const OrdersScreen: NavigationStackScreenComponent = () => {
 
   return (
     <FlatList
+      refreshing={isRefreshing}
+      onRefresh={handleFetchOrders}
       data={orders}
       renderItem={({ item }) => (
         <OrderItem

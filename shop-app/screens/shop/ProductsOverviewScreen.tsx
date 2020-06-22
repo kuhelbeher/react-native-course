@@ -23,6 +23,7 @@ const ProductsOverviewScreen: NavigationStackScreenComponent = ({
   navigation,
 }) => {
   const [isLoading, setIsLoading] = useState(false);
+  const [isRefreshing, setIsRefreshing] = useState(false);
   const [error, setError] = useState(null);
   const products = useSelector(
     (state: RootState) => state.products.availableProducts,
@@ -31,7 +32,7 @@ const ProductsOverviewScreen: NavigationStackScreenComponent = ({
   const dispatch = useDispatch<AppThunkDispatch>();
 
   const handleFetchProducts = useCallback(async () => {
-    setIsLoading(true);
+    setIsRefreshing(true);
     setError(null);
 
     try {
@@ -39,11 +40,15 @@ const ProductsOverviewScreen: NavigationStackScreenComponent = ({
     } catch (error) {
       setError(error.message);
     }
-    setIsLoading(false);
+
+    setIsRefreshing(false);
   }, [dispatch]);
 
   useEffect(() => {
-    handleFetchProducts();
+    setIsLoading(true);
+    handleFetchProducts().then(() => {
+      setIsLoading(false);
+    });
   }, [handleFetchProducts]);
 
   useEffect(() => {
@@ -93,8 +98,10 @@ const ProductsOverviewScreen: NavigationStackScreenComponent = ({
 
   return (
     <FlatList
+      refreshing={isRefreshing}
       data={products}
       keyExtractor={(item) => item.id}
+      onRefresh={handleFetchProducts}
       renderItem={({ item }) => (
         <ProductItem
           uri={item.imageUrl}
