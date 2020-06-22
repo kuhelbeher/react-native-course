@@ -51,9 +51,13 @@ export const deleteProductSuccess = (payload: string): ProductActionTypes => ({
 export const deleteProduct = (
   payload: string,
 ): AppThunk<Promise<void>> => async (dispatch) => {
-  await fetch(`${apiUrl}/products/${payload}.json`, {
+  const res = await fetch(`${apiUrl}/products/${payload}.json`, {
     method: 'DELETE',
   });
+
+  if (!res.ok) {
+    throw new Error('Something went wrong');
+  }
 
   dispatch(deleteProductSuccess(payload));
 };
@@ -68,26 +72,26 @@ export const createProductSuccess = (
 export const createProduct = (
   payload: Omit<CreateProductPayload, 'id'>,
 ): AppThunk<Promise<void>> => async (dispatch) => {
-  try {
-    const res = await fetch(`${apiUrl}/products.json`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(payload),
-    });
+  const res = await fetch(`${apiUrl}/products.json`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(payload),
+  });
 
-    const data: { name: string } = await res.json();
-
-    dispatch(
-      createProductSuccess({
-        id: data.name,
-        ...payload,
-      }),
-    );
-  } catch (error) {
-    console.log(error);
+  if (!res.ok) {
+    throw new Error('Something went wrong');
   }
+
+  const data: { name: string } = await res.json();
+
+  dispatch(
+    createProductSuccess({
+      id: data.name,
+      ...payload,
+    }),
+  );
 };
 
 export const updateProductSuccess = (
@@ -101,13 +105,17 @@ export const updateProduct = ({
   id,
   ...payload
 }: UpdateProductPayload): AppThunk<Promise<void>> => async (dispatch) => {
-  await fetch(`${apiUrl}/products/${id}.json`, {
+  const res = await fetch(`${apiUrl}/products/${id}.json`, {
     method: 'PATCH',
     headers: {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify(payload),
   });
+
+  if (!res.ok) {
+    throw new Error('Something went wrong');
+  }
 
   dispatch(
     updateProductSuccess({
