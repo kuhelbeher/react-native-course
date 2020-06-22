@@ -51,7 +51,7 @@ export const deleteProductSuccess = (payload: string): ProductActionTypes => ({
 export const deleteProduct = (
   payload: string,
 ): AppThunk<Promise<void>> => async (dispatch) => {
-  const res = await fetch(`${apiUrl}/products/${payload}.json`, {
+  const res = await fetch(`${apiUrl}/products/${payload}.jon`, {
     method: 'DELETE',
   });
 

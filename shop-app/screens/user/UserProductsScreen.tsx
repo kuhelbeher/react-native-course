@@ -1,5 +1,13 @@
-import React from 'react';
-import { FlatList, Platform, Button, Alert } from 'react-native';
+import React, { useState } from 'react';
+import {
+  FlatList,
+  Platform,
+  Button,
+  Alert,
+  View,
+  ActivityIndicator,
+  StyleSheet,
+} from 'react-native';
 import { NavigationStackScreenComponent } from 'react-navigation-stack';
 import { useSelector, useDispatch } from 'react-redux';
 
@@ -9,13 +17,16 @@ import { RootState } from '../../store/reducers';
 import HeaderButtonComponent from '../../components/UI/HeaderButton';
 import { COLORS } from '../../constants';
 import { deleteProduct } from '../../store/actions';
+import { AppThunkDispatch } from '../../types';
 
 const UserProductsScreen: NavigationStackScreenComponent = ({ navigation }) => {
+  const [isLoading, setIsLoading] = useState(false);
+
   const products = useSelector(
     (state: RootState) => state.products.userProducts,
   );
 
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppThunkDispatch>();
 
   const handleEditProduct = (id: string) => {
     navigation.navigate('EditProduct', { id });
@@ -27,12 +38,30 @@ const UserProductsScreen: NavigationStackScreenComponent = ({ navigation }) => {
       {
         text: 'Yes',
         style: 'destructive',
-        onPress: () => {
-          dispatch(deleteProduct(id));
+        onPress: async () => {
+          setIsLoading(true);
+
+          try {
+            await dispatch(deleteProduct(id));
+          } catch (error) {
+            Alert.alert('An error ocurred!', error.message || '', [
+              { text: 'Okay' },
+            ]);
+          }
+
+          setIsLoading(false);
         },
       },
     ]);
   };
+
+  if (isLoading) {
+    return (
+      <View style={styles.centered}>
+        <ActivityIndicator size="large" color={COLORS.primary} />
+      </View>
+    );
+  }
 
   return (
     <FlatList
@@ -99,3 +128,11 @@ UserProductsScreen.navigationOptions = ({ navigation }) => ({
 });
 
 export default UserProductsScreen;
+
+const styles = StyleSheet.create({
+  centered: {
+    alignItems: 'center',
+    flex: 1,
+    justifyContent: 'center',
+  },
+});
